@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="/">Eryk's Library</a>
+    <div class="container">
+        <form action="/search" method="post" class="mt-3">
+            <div class="row">
+                <div class="col-md-8">
+                    <input type="text" name="search_term" class="form-control" placeholder="Search">
+                </div>
+                <div class="col-md-4">
+                    <button type="submit" class="btn btn-primary">Search</button>
+                </div>
+            </div>
+            <a th:if="${session.user != null}" href="/profile" class="btn btn-primary" style="position:absolute; top:10px; right:100px;">Profile</a>
+        </form>
+        <a th:unless="${session.user != null}" href="/login" class="btn btn-success" style="position:absolute; top:10px; right:10px;">Login</a>
+        <form th:if="${session.user != null}" action="/logout" method="post" style="position:absolute; top:10px; right:10px;">
+            <input type="submit" value="Logout" class="btn btn-danger">
+        </form>
+    </div>
+</nav>
+<head>
+    <title>Profile</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container">
+    <h1>Profile</h1>
+    <p><strong>Login:</strong> <span th:text="${user.login}"></span></p>
+    <p><strong>Name:</strong> <span th:text="${user.name}"></span></p>
+    <p><strong>Surname:</strong> <span th:text="${user.surname}"></span></p>
+    <p><strong>Email:</strong> <span th:text="${user.email}"></span></p>
+    <p><strong>Street Name:</strong> <span th:text="${user.street_name}"></span></p>
+    <p><strong>City:</strong> <span th:text="${user.city}"></span></p>
+    <p><strong>Phone:</strong> <span th:text="${user.phone}"></span></p>
+
+    <table id="orderTable" class="table table-striped">
+        <thead>
+        <tr>
+            <th>Order ID</th>
+            <th>Book ID</th>
+            <th>Order Date</th>
+            <th>Return By Date</th>
+            <th>Return Date</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="order : ${orders}">
+            <td th:text="${order.id_order}"></td>
+            <td><a th:href="@{/book/{id}(id=${order.book.id_book})}" th:text="${order.book.title}">Book Title</a></td>
+            <td th:text="${#dates.format(order.order_date, 'dd-MM-yyyy')}"></td>
+            <td th:text="${#dates.format(order.return_by_date, 'dd-MM-yyyy')}"></td>
+            <td th:text="${#dates.format(order.return_date, 'dd-MM-yyyy')}"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+
+</body>
+</html>
